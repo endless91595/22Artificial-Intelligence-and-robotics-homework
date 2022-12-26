@@ -53,6 +53,26 @@ hold on;
 %用plot函数显示出整个机械臂的运动
 robot.plot(B);
 
+clear
+%% 初始化x,y
+x = [17.447 17.470 17.534 17.565 17.635]/5;
+y = [sin(deg2rad(5/2))^2 sin(deg2rad(10/2))^2 sin(deg2rad(15/2))^2 sin(deg2rad(20/2))^2 sin(deg2rad(25/2))^2];
+%% 最小二乘法计算a,b
+xp = [x; ones(size(x))];
+C = y * xp' * inv(xp*xp');
+a = C(1);
+b = C(2);
+%% 作图
+plot(x, y, 'o')
+hold on
+plot(x, a*x+b, '--r');
+%% 验证最小平方和
+fun = @(D) sum((D(1)*x+D(2)-y).^2);
+D0 = [0 0];
+D = fminsearch(fun, D0);
+a_ = D(1);
+b_ = D(2);
+
 
 
 
